@@ -1,11 +1,12 @@
 import rclpy
 from rclpy.node import Node
-import numpy as np
 import json
 from std_msgs.msg import String  # Import the String message type
 from std_msgs.msg import Float64MultiArray
 from stable_baselines3 import PPO
 import pickle
+import os
+import numpy as np
 
 class PPOControlNode(Node):
     def __init__(self):
@@ -13,9 +14,15 @@ class PPOControlNode(Node):
 
         # Load the PPO model and VecNormalize
         self.get_logger().info("Loading PPO model and VecNormalize...")
-
+     
+        print(f"NumPy version: {np.__version__}")
+        print(os.getcwd())
+        domain_id = os.getenv("ROS_DOMAIN_ID", "0")
+        print(f"ROS 2 Domain ID: {domain_id}")
+        RMW_IMPLEMENTATION = os.getenv("RMW_IMPLEMENTATION", "0")
+        print(f"ROS 2 RMW_IMPLEMENTATION: {RMW_IMPLEMENTATION}")
         # Paths to your trained PPO model and normalization files
-        ppo_model_path = '/home/pablo/ros2_ws/src/autonomous_rov/autonomous_rov/policies_ppo/bluerov_ppo_scratch3.zip'
+        ppo_model_path = 'src/autonomous_rov/autonomous_rov/policies_ppo/bluerov_ppo_scratch3'
         #vecnorm_path = '/home/pablo/ros2_ws/src/autonomous_rov/autonomous_rov/policies_ppo/bluerov_vec_normalize_clean.pkl'
 
         # Load PPO model
@@ -45,6 +52,7 @@ class PPOControlNode(Node):
         self.timer = self.create_timer(1.0, self.take_action)  # 1.0 second interval
 
     def sensor_data_callback(self, msg):
+        print("I AM ALIVEEEEEE!!!!")
         try:
             # Parse JSON string into a Python dictionary
             observation_dict = json.loads(msg.data)
