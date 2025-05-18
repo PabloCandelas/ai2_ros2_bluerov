@@ -77,6 +77,10 @@ class PPOControlNode(Node):
         """
         Take an action using the PPO model and publish it to the robot.
         """
+        print("publishing")
+        msg = Float64MultiArray()
+        msg.data = [1.0]  # or whatever array of floats you want to send
+        self.publisher.publish(msg)
         if self.sensor_data is not None:
             # Normalize the sensor data using VecNormalize
             #normalized_obs = self.vecnorm.normalize_obs(self.sensor_data)

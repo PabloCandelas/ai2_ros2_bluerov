@@ -3,6 +3,8 @@ from rclpy.node import Node
 from std_msgs.msg import String
 import json
 import numpy as np
+import os
+
 
 class MockObservationPublisher(Node):
     def __init__(self):
@@ -10,6 +12,13 @@ class MockObservationPublisher(Node):
         self.publisher_ = self.create_publisher(String, 'observations', 10)
         self.timer = self.create_timer(0.5, self.timer_callback)
         self.get_logger().info('Mock Observation Publisher Started')
+
+        print(f"NumPy version: {np.__version__}")
+        print(os.getcwd())
+        domain_id = os.getenv("ROS_DOMAIN_ID", "0")
+        print(f"ROS 2 Domain ID: {domain_id}")
+        RMW_IMPLEMENTATION = os.getenv("RMW_IMPLEMENTATION", "0")
+        print(f"ROS 2 RMW_IMPLEMENTATION: {RMW_IMPLEMENTATION}")
 
     def timer_callback(self):
         observation = {
